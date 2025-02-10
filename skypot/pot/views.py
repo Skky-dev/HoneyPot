@@ -4,15 +4,16 @@ import requests
 import folium
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.conf import settings
 
 def pot_map(request):
-    map = folium.Map(location=[20.5937, 78.99629], tiles="Cartodb dark_matter", zoom_start=3)
+    map = folium.Map(location=[20.5937, 78.9629], tiles="Cartodb dark_matter", zoom_start=3)
 
     ip_list= []
-    log_file = r"C:\Users\Amrit kumar\Desktop\HoneyPot-Dashboard\cowrie.json.2022-11-15"
+    log_file = os.path.join(settings.BASE_DIR,".." ,'cowrie.json.2022-11-15')
 
     if not os.path.exists(log_file):
-        return HttpResponse("Log File is incorrect")
+        return HttpResponse("Log File Path is incorrect")
 
     try:
         with  open(log_file, "r", encoding="utf-8") as f:
@@ -48,10 +49,9 @@ def pot_map(request):
                         tooltip=f"Country:<b>{res['country']} </b><br>Region:<b>{res['regionName']}</b>",
                     ).add_to(map)
         else:
-            print("Rate limit reached or error occurred")
-            flag=False
-            break
-   
-    if not flag:
-        return HttpResponse("Error Occured, Likely Rate Limit Reached")
-    return render(request, "dashboard.html", {"map":map._repr_html_()})
+            return HttpResponse("Rate limit reached or error occurred")
+            
+    
+    map_path = 'static/map.html'
+    map.save(map_path)
+    return render(request, "dashboard.html", {"static_map": map_path})
