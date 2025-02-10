@@ -9,7 +9,7 @@ def pot_map(request):
     map = folium.Map(location=[20.5937, 78.99629], tiles="Cartodb dark_matter", zoom_start=3)
 
     ip_list= []
-    log_file = r"C:\Users\rohit\OneDrive\Desktop\Dashboard Example\cowrie.json.2022-11-15"
+    log_file = r"C:\Users\Amrit kumar\Desktop\HoneyPot-Dashboard\cowrie.json.2022-11-15"
 
     if not os.path.exists(log_file):
         return HttpResponse("Log File is incorrect")
