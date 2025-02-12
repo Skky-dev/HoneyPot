@@ -28,4 +28,5 @@ def pot_map(request):
     map.save(map_path)
 
     return render(request, "dashboard.html", {"static_map":map_path})
+
     
