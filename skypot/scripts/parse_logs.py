@@ -20,6 +20,7 @@ def parse_log_and_store_data(log_file_path):
     ip_map={}
     new_ips=set()
     credentials_list=[]
+    hit_count_updates={}
 
     existing_ips = set(Database.objects.values_list('src_ip', flat=True))
     existing_credentials = set(Credentials.objects.values_list('username', 'password'))
@@ -37,7 +38,7 @@ def parse_log_and_store_data(log_file_path):
                 if src_ip not in existing_ips:
                     new_ips.add(src_ip)
                 else:
-                    Database.objects.filter(src_ip=src_ip).update(hit_count=F("hit_count") + 1)
+                    hit_count_updates[src_ip] = hit_count_updates.get(src_ip, 0) + 1
                 if username and password:
                     credentials_list.append({
                         "src_ip":src_ip,
@@ -47,6 +48,8 @@ def parse_log_and_store_data(log_file_path):
 
             except json.JSONDecodeError:
                 continue
+    for ip, count in hit_count_updates.items():
+        Database.objects.filter(src_ip=ip).update(hit_count=F("hit_count") + count)
     
     new_entries=[]
     if new_ips:
@@ -67,7 +70,8 @@ def parse_log_and_store_data(log_file_path):
 
         ip_map.update({entry.src_ip: entry for entry in Database.objects.filter(src_ip__in=new_ips)})
 
-    
+    new_cred_count = 0
+    updated_cred_count=0
     credentials_objects = []
     if credentials_list:
         for entry in credentials_list:
@@ -82,13 +86,18 @@ def parse_log_and_store_data(log_file_path):
                 defaults={"frequency": 1}
             )
 
-            if not created:
-                credentials_obj.frequency += 1
-                credentials_obj.save()
+            if created:
+                new_cred_count += 1
+            else:
+                updated_cred_count += 1
+                credentials_obj.frequency = F("frequency") + 1
+                credentials_obj.save(update_fields=["frequency"])
 
             credentials_objects.append(credentials_obj)    
     
-    print(f"Inserted {len(new_entries)} new IPS and {len(credentials_objects)} credentials. ")
+    print(f"Inserted {len(new_entries)} new IPs.")
+    print(f"Inserted {new_cred_count} new credentials.")
+    print(f"Updated {updated_cred_count} existing credentials.")
 
 if __name__ ==  "__main__":
     parse_log_and_store_data(log_file)
