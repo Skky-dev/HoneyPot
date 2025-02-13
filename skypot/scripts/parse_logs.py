@@ -11,6 +11,7 @@ django.setup()
 from django.conf import settings
 from pot.models import Database, Credentials
 from scripts.geolocation import get_batch_geolocation
+from django.db.models import F
 
 log_file = os.path.join(settings.BASE_DIR, "..", "cowrie.json.2022-11-15")
 
@@ -19,8 +20,9 @@ def parse_log_and_store_data(log_file_path):
     ip_map={}
     new_ips=set()
     credentials_list=[]
-    
+
     existing_ips = set(Database.objects.values_list('src_ip', flat=True))
+    existing_credentials = set(Credentials.objects.values_list('username', 'password'))
 
     with open(log_file_path, 'r',encoding="utf-8") as file:
         for line in file:
@@ -34,6 +36,8 @@ def parse_log_and_store_data(log_file_path):
                     continue  
                 if src_ip not in existing_ips:
                     new_ips.add(src_ip)
+                else:
+                    Database.objects.filter(src_ip=src_ip).update(hit_count=F("hit_count") + 1)
                 if username and password:
                     credentials_list.append({
                         "src_ip":src_ip,
@@ -61,20 +65,28 @@ def parse_log_and_store_data(log_file_path):
             
         Database.objects.bulk_create(new_entries)
 
-        ip_map.update(Database.objects.in_bulk(new_ips, field_name="src_ip"))
-        
-    credentials_objects=[]
+        ip_map.update({entry.src_ip: entry for entry in Database.objects.filter(src_ip__in=new_ips)})
+
+    
+    credentials_objects = []
     if credentials_list:
-        credentials_objects = [
-            Credentials(
-                ip=ip_map.get(entry["src_ip"]) or Database.objects.filter(src_ip=entry["src_ip"]).first(),
-                username = entry["username"],
+        for entry in credentials_list:
+            ip_obj = ip_map.get(entry["src_ip"]) or Database.objects.filter(src_ip=entry["src_ip"]).first()
+            if not ip_obj:
+                continue 
+
+            credentials_obj, created = Credentials.objects.get_or_create(
+                ip=ip_obj,
+                username=entry["username"],
                 password=entry["password"],
+                defaults={"frequency": 1}
             )
-            for entry in credentials_list
-        ]
-        if credentials_objects:
-            Credentials.objects.bulk_create(credentials_objects)
+
+            if not created:
+                credentials_obj.frequency += 1
+                credentials_obj.save()
+
+            credentials_objects.append(credentials_obj)    
     
     print(f"Inserted {len(new_entries)} new IPS and {len(credentials_objects)} credentials. ")
 

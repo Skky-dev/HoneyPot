@@ -7,8 +7,10 @@ class Database(models.Model):
     lon = models.CharField(max_length=50)
     country = models.CharField(max_length=100, blank=True, null=True)
     region = models.CharField(max_length=200, blank=True, null=True)
+    hit_count = models.IntegerField(default=1)
 
 class Credentials(models.Model):
     ip = models.ForeignKey(Database, on_delete=models.CASCADE, related_name="credentials")
     username = models.CharField(max_length=255, blank=True, null=True)
     password = models.CharField(max_length=255, blank=True, null=True)
+    frequency = models.IntegerField(default=1)
