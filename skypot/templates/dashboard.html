@@ -1,12 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Honepot Example</title>
-</head>
-<body>
-    <h2>Honeypot Example</h2>
-    <iframe src="{{ static_map }}" width="100%" height="600px" style="border:none;"></iframe>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h2>Honeypot Attack Dashboard</h2>
+
+        <!-- Honeypot Attack Map -->
+        <div class="graph-container">
+            <p style="text-align: center; font-size: 14px; color: #bbb;">
+                To filter map data, press the <strong>Layer Control</strong> button on the map.
+            </p>
+            <iframe src="{{ static_map }}"></iframe>
+        </div>
+
+        <!-- Plotly Graphs -->
+        <div class="grid">
+            {% if attack_plot %}
+            <div class="graph-container">
+                <iframe src="{{ attack_plot }}"></iframe>
+            </div>
+            {% endif %}
+
+            {% if cred_plot %}
+            <div class="graph-container">
+                <iframe src="{{ cred_plot }}"></iframe>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Top 10 Attackers Table -->
+        <div class="graph-container">
+            <h2>Top 10 Attackers</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>IP</th>
+                        <th>Country</th>
+                        <th>Region</th>
+                        <th>Nr. Attacks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attacker in top_attackers %}
+                    <tr>
+                        <td>{{ attacker.src_ip }}</td>
+                        <td>{{ attacker.country }}</td>
+                        <td>{{ attacker.region }}</td>
+                        <td>{{ attacker.hit_count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Top Username/Password Pairs Table -->
+        <div class="graph-container">
+            <h2>Top Username/Password Pairs</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Times Used</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cred in top_credentials %}
+                    <tr>
+                        <td>{{ cred.username }}</td>
+                        <td>{{ cred.password }}</td>
+                        <td>{{ cred.frequency }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
