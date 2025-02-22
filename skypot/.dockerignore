@@ -1,0 +1,31 @@
+# Ignore virtual environment
+venv/
+.venv/
+
+# Ignore Cowrie-related files and folders
+cowrie/
+
+# Ignore Nginx configuration files
+nginx/
+nginx.conf
+
+# Ignore Python cache files
+__pycache__/
+*/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore Docker-related files (if any)
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Ignore other unnecessary files
+.env
+*.log
+*.sqlite3
