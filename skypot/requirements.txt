@@ -1,0 +1,5 @@
+Django
+folium
+requests
+plotly
+gunicorn
