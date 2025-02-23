@@ -13,7 +13,17 @@ from pot.models import Database, Credentials
 from scripts.geolocation import get_batch_geolocation
 from django.db.models import F
 
-log_file = os.path.join(settings.BASE_DIR, "..", "cowrie.json.2022-11-15")
+log_dir = os.path.join(settings.BASE_DIR, "logs")
+log_files = sorted(
+    [f for f in os.listdir(log_dir) if f.startswith("cowrie.json.")],
+    reverse=True
+)
+
+if not log_files:
+    print("No log File Found")
+    sys.exit(1)
+
+latest_log_file = os.path.join(log_dir, log_files[0])
 
 def parse_log_and_store_data(log_file_path):
     
@@ -100,4 +110,4 @@ def parse_log_and_store_data(log_file_path):
     print(f"Updated {updated_cred_count} existing credentials.")
 
 if __name__ ==  "__main__":
-    parse_log_and_store_data(log_file)
+    parse_log_and_store_data(latest_log_file)
