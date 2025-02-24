@@ -17,8 +17,9 @@ This dashboard provides valuable insights into malicious SSH login attempts, vis
 
 ## 📷 Dashboard Overview
 
-Access the Live Dashboard at
-![https://dash.skky.tech](https://dash.skky.tech)
+Access the Live Dashboard at:
+`https://dash.skky.tech`
+
 
 ---
 
