@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  django:
+    build: ./django_app
+    container_name: django_service
+    restart: unless-stopped
+    volumes:
+      - static_vol:/app/static
+      - logs_vol:/app/logs
+    env_file:
+      - .env
+
+  cowrie:
+    image: cowrie/cowrie
+    container_name: honeypot_service
+    restart: unless-stopped
+    volumes:
+      - logs_vol:/cowrie/logs
+      - config_vol:/cowrie/config
+    ports:
+      - "2222:2222"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    restart: unless-stopped
+    volumes:
+      - static_vol:/app/static
+      - nginx_config:/etc/nginx/
+      - certs_vol:/etc/ssl/certs
+    depends_on:
+      - django
+    ports:
+      - "80:80"
+      - "443:443"
+
+volumes:
+  static_vol:
+  logs_vol:
+  config_vol:
+  nginx_config:
+  certs_vol:
