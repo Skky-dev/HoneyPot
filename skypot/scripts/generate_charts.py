@@ -22,7 +22,7 @@ def save_plotly_chart(fig, filename):
 def create_attack_plot():
     country_data = list(Database.objects.values('country')
                         .annotate(attacks=Sum('hit_count'))
-                        .order_by('-attacks')[:15])
+                        .order_by('-attacks')[:10])
 
     if not country_data:
         print("No Database Found")
@@ -31,7 +31,6 @@ def create_attack_plot():
     fig = px.pie(
         names=[d['country'] for d in country_data],
         values=[d['attacks'] for d in country_data],
-        title='Top 15 Attacking Countries',
         template='plotly_dark',
         hole=.7,
     )
@@ -49,7 +48,6 @@ def create_credentials_plot():
     fig = px.pie(
         names=[d['username'] for d in cred_data],
         values=[d['attempts'] for d in cred_data],
-        title='Most Common Usernames',
         template='plotly_dark',
         hole=.7,
     )

@@ -4,50 +4,224 @@ body {
     color: white;
     margin: 0;
     padding: 0;
-}
-.container {
+    line-height: 1.6;
+  }
+  
+  .container {
     max-width: 1200px;
     margin: auto;
     padding: 20px;
-}
-h2 {
+  }
+  
+  h2 {
     text-align: center;
-    color: #4C8BF5;
-}
-.graph-container {
-    background-color: #1E1E1E;
+    color: #4c8bf5;
+    margin-bottom: 20px;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+  
+  .graph-container {
+    background-color: #1e1e1e;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
     margin-bottom: 20px;
-}
-.grid {
+  }
+  
+  .map-info {
+    text-align: center;
+    font-size: clamp(12px, 2vw, 14px);
+    color: #bbb;
+    margin-bottom: 10px;
+  }
+  
+  .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-}
-iframe {
+  }
+  
+  iframe {
     width: 100%;
-    height: 500px;
+    height: 400px;
     border: none;
-}
-table {
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #1E1E1E;
+    background-color: #1e1e1e;
     border-radius: 8px;
     overflow: hidden;
-}
-th, td {
+  }
+  
+  th,
+  td {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #444;
-}
-th {
-    background-color: #4C8BF5;
+  }
+  
+  th {
+    background-color: #4c8bf5;
     color: white;
-}
-tr:nth-child(even) {
-    background-color: #2A2A2A;
-}
+  }
+  
+  tr:nth-child(even) {
+    background-color: #2a2a2a;
+  }
+  
+  footer {
+    background-color: #1e1e1e;
+    color: #bbb;
+    padding: 40px 20px;
+    margin-top: 40px;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+  }
+  
+  .footer-section {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 20px;
+  }
+  
+  .footer-section h3 {
+    color: #4c8bf5;
+    margin-bottom: 15px;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+  }
+  
+  footer a {
+    color: #4c8bf5;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  footer a:hover {
+    color: #7eacf5;
+    text-decoration: underline;
+  }
+  
+  .ssh-command {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: #2a2a2a;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    gap: 10px;
+  }
+  
+  .ssh-command code {
+    flex: 1 1 200px;
+    font-family: "Courier New", Courier, monospace;
+    color: #4c8bf5;
+    word-break: break-all;
+  }
+  
+  .copy-btn {
+    background-color: #4c8bf5;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+  }
+  
+  .copy-btn:hover {
+    background-color: #7eacf5;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #2a2a2a;
+    font-size: clamp(12px, 2vw, 14px);
+  }
+  
+  @media screen and (max-width: 768px) {
+    .container {
+      padding: 15px;
+    }
+  
+    .graph-container {
+      padding: 15px;
+    }
+  
+    iframe {
+      height: 350px;
+    }
+  
+    th,
+    td {
+      padding: 8px;
+      font-size: clamp(12px, 2vw, 14px);
+    }
+  
+    .footer-content {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .footer-section {
+      text-align: center;
+      width: 100%;
+    }
+  
+    .ssh-command {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .ssh-command code {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .container {
+      padding: 10px;
+    }
+  
+    .graph-container {
+      padding: 10px;
+    }
+  
+    iframe {
+      height: 300px;
+    }
+  
+    table {
+      font-size: 12px;
+    }
+  
+    th,
+    td {
+      padding: 6px;
+    }
+  }
+  
+  
+  
+  
+  
+  

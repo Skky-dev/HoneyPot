@@ -5,7 +5,7 @@
 
         <!-- Honeypot Attack Map -->
         <div class="graph-container">
-            <p style="text-align: center; font-size: 14px; color: #bbb;">
+            <p class="map-info">
                 To filter map data, press the <strong>Layer Control</strong> button on the map.
             </p>
             <iframe src="{{ static_map }}"></iframe>
@@ -15,12 +15,14 @@
         <div class="grid">
             {% if attack_plot %}
             <div class="graph-container">
+                <h2>Top 10 Attackers</h2>
                 <iframe src="{{ attack_plot }}"></iframe>
             </div>
             {% endif %}
 
             {% if cred_plot %}
             <div class="graph-container">
+                <h2>Most Common Username</h2>
                 <iframe src="{{ cred_plot }}"></iframe>
             </div>
             {% endif %}
@@ -29,49 +31,84 @@
         <!-- Top 10 Attackers Table -->
         <div class="graph-container">
             <h2>Top 10 Attackers</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>IP</th>
-                        <th>Country</th>
-                        <th>Region</th>
-                        <th>Nr. Attacks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for attacker in top_attackers %}
-                    <tr>
-                        <td>{{ attacker.src_ip }}</td>
-                        <td>{{ attacker.country }}</td>
-                        <td>{{ attacker.region }}</td>
-                        <td>{{ attacker.hit_count }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>IP</th>
+                            <th>Country</th>
+                            <th>Region</th>
+                            <th>Nr. Attacks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attacker in top_attackers %}
+                        <tr>
+                            <td>{{ attacker.src_ip }}</td>
+                            <td>{{ attacker.country }}</td>
+                            <td>{{ attacker.region }}</td>
+                            <td>{{ attacker.hit_count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Top Username/Password Pairs Table -->
         <div class="graph-container">
             <h2>Top Username/Password Pairs</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Times Used</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for cred in top_credentials %}
-                    <tr>
-                        <td>{{ cred.username }}</td>
-                        <td>{{ cred.password }}</td>
-                        <td>{{ cred.frequency }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Times Used</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cred in top_credentials %}
+                        <tr>
+                            <td>{{ cred.username }}</td>
+                            <td>{{ cred.password }}</td>
+                            <td>{{ cred.frequency }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Repository</h3>
+                <p>Check out the code on <a href="https://github.com/Skky-dev/HoneyPot.git" target="_blank">GitHub</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Try the Honeypot</h3>
+                <div class="ssh-command">
+                    <code>ssh root@dash.skky.tech</code>
+                    <button class="copy-btn" onclick="copyToClipboard('ssh root@dash.skky.tech')">Copy</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Sky's Honeypot Project. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('SSH command copied to clipboard!');
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    </script>
 {% endblock %}
+
+
