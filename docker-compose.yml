@@ -2,7 +2,7 @@ version: '3'
 
 services:
   django:
-    build: ./django_app
+    build: ./skypot
     container_name: django_service
     restart: unless-stopped
     volumes:
